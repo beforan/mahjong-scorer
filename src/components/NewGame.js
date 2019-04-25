@@ -10,7 +10,7 @@ import {
 import { InfoCircle } from "styled-icons/fa-solid";
 import { Grid, Cell } from "styled-css-grid";
 
-const NewGame = () => {
+const NewGame = ({ onStartNewGameClick }) => {
   const [players, setPlayers] = useState({});
 
   const handleNameEdit = ({ target }) => {
@@ -18,7 +18,8 @@ const NewGame = () => {
   };
 
   const handleStartClick = () => {
-    // TODO
+    const { E, N, W, S } = players;
+    onStartNewGameClick([E, N, W, S]);
   };
 
   return (
@@ -45,22 +46,44 @@ const NewGame = () => {
         >
           <Cell area="east" center>
             <Typography variant="h4">East:</Typography>
-            <Input />
+            <Input
+              name="E"
+              value={players.E}
+              onChange={handleNameEdit}
+              tabIndex={1}
+            />
           </Cell>
           <Cell area="north" center>
             <Typography variant="h4">North:</Typography>
-            <Input />
+            <Input
+              name="N"
+              value={players.N}
+              onChange={handleNameEdit}
+              tabIndex={2}
+            />
           </Cell>
           <Cell area="south" center>
             <Typography variant="h4">South:</Typography>
-            <Input />
+            <Input
+              name="S"
+              value={players.S}
+              onChange={handleNameEdit}
+              tabIndex={4}
+            />
           </Cell>
           <Cell area="west" center>
             <Typography variant="h4">West:</Typography>
-            <Input />
+            <Input
+              name="W"
+              value={players.W}
+              onChange={handleNameEdit}
+              tabIndex={3}
+            />
           </Cell>
         </Grid>
-        <Button mt={3}>Start Game!</Button>
+        <Button type="submit" mt={3} onClick={handleStartClick} tabIndex={5}>
+          Start Game!
+        </Button>
       </Box>
     </Container>
   );
