@@ -5,7 +5,8 @@ import {
   Typography,
   Radio,
   FormCheck,
-  FormCheckLabel
+  FormCheckLabel,
+  Grid as Container
 } from "@smooth-ui/core-sc";
 import { calculatePayments } from "../services/payment-scoring";
 import { Grid } from "styled-css-grid";
@@ -60,53 +61,55 @@ const PaymentScorer = () => {
   });
 
   return (
-    <Box display="flex" flexDirection="column">
-      <Typography variant="h4">Enter player scores</Typography>
-      <Box>
-        <Typography>Mahjong:</Typography>
-        {radios}
-      </Box>
-      <Box p={1}>
-        <Grid columns="1fr 2fr">{inputs}</Grid>
-      </Box>
+    <Container>
+      <Box display="flex" flexDirection="column">
+        <Typography variant="h4">Enter player scores</Typography>
+        <Box>
+          <Typography>Mahjong:</Typography>
+          {radios}
+        </Box>
+        <Box p={1}>
+          <Grid columns="1fr 2fr">{inputs}</Grid>
+        </Box>
 
-      <table>
-        <thead>
-          <tr>
-            <th>East</th>
-            <th>South</th>
-            <th>West</th>
-            <th>North</th>
-          </tr>
-        </thead>
-        <tbody>
-          {[0, 1, 2, 3, 4].map(i => (
+        <table>
+          <thead>
+            <tr>
+              <th>East</th>
+              <th>South</th>
+              <th>West</th>
+              <th>North</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[0, 1, 2, 3, 4].map(i => (
+              <tr>
+                {results.map(r => (
+                  <td>
+                    <Typography fontWeight={r.mahjong ? "bold" : "normal"}>
+                      {r.ledger[i] || "-"}
+                    </Typography>
+                  </td>
+                ))}
+              </tr>
+            ))}
             <tr>
               {results.map(r => (
                 <td>
-                  <Typography fontWeight={r.mahjong ? "bold" : "normal"}>
-                    {r.ledger[i] || "-"}
+                  <Typography
+                    borderTop={1}
+                    borderColor="black"
+                    fontWeight={r.mahjong ? "bold" : "normal"}
+                  >
+                    {r.total}
                   </Typography>
                 </td>
               ))}
             </tr>
-          ))}
-          <tr>
-            {results.map(r => (
-              <td>
-                <Typography
-                  borderTop={1}
-                  borderColor="black"
-                  fontWeight={r.mahjong ? "bold" : "normal"}
-                >
-                  {r.total}
-                </Typography>
-              </td>
-            ))}
-          </tr>
-        </tbody>
-      </table>
-    </Box>
+          </tbody>
+        </table>
+      </Box>
+    </Container>
   );
 };
 
