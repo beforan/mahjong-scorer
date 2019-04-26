@@ -40,6 +40,7 @@ const PaymentScorer = () => {
         value={scores[i]}
         name={i}
         onChange={handleScoreChange}
+        autoComplete="off"
       />
     ]);
   });
