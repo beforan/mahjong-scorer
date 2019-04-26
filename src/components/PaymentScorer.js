@@ -3,9 +3,7 @@ import {
   Box,
   Input,
   Typography,
-  Radio,
-  FormCheck,
-  FormCheckLabel,
+  Select,
   Grid as Container
 } from "@smooth-ui/core-sc";
 import { calculatePayments } from "../services/payment-scoring";
@@ -29,23 +27,8 @@ const PaymentScorer = () => {
     );
   }, [mahjong, scores]);
 
-  const winds = ["East", "South", "West", "North"];
-  const radios = [];
   const inputs = [];
-  winds.forEach((v, i) => {
-    radios.push(
-      <FormCheck key={v}>
-        <Radio
-          id={`mahjong${v}`}
-          name="mahjongWind"
-          value={"" + (i + 1)}
-          checked={i + 1 === mahjong}
-          onChange={handleMahjongChange}
-        />
-        <FormCheckLabel htmlFor={`mahjong${v}`}>{v}</FormCheckLabel>
-      </FormCheck>
-    );
-
+  ["East", "South", "West", "North"].forEach((v, i) => {
     inputs.push([
       <Typography key={v} textAlign="right">
         {v}
@@ -65,12 +48,17 @@ const PaymentScorer = () => {
     <Container>
       <Box display="flex" flexDirection="column">
         <Typography variant="h4">Enter player scores</Typography>
-        <Box>
-          <Typography>Mahjong:</Typography>
-          {radios}
-        </Box>
         <Box p={1} width={0.6}>
-          <Grid columns="1fr 2fr">{inputs}</Grid>
+          <Grid columns="1fr 2fr">
+            <Typography textAlign="right">Winner</Typography>
+            <Select control value={mahjong} onChange={handleMahjongChange}>
+              <option value={1}>East</option>
+              <option value={2}>South</option>
+              <option value={3}>West</option>
+              <option value={4}>North</option>
+            </Select>
+            {inputs}
+          </Grid>
         </Box>
 
         <ScoreSheet results={results} />
