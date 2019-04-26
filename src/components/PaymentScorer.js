@@ -10,6 +10,7 @@ import {
 } from "@smooth-ui/core-sc";
 import { calculatePayments } from "../services/payment-scoring";
 import { Grid } from "styled-css-grid";
+import ScoreSheet from "./ScoreSheet";
 
 const PaymentScorer = () => {
   const [mahjong, setMahjong] = useState(1);
@@ -27,8 +28,6 @@ const PaymentScorer = () => {
       calculatePayments(mahjong, [0, 1, 2, 3].map(i => scores[i] || 0))
     );
   }, [mahjong, scores]);
-
-  useEffect(() => console.log(results), [results]);
 
   const winds = ["East", "South", "West", "North"];
   const radios = [];
@@ -48,7 +47,9 @@ const PaymentScorer = () => {
     );
 
     inputs.push([
-      <Typography key={v}>{v}</Typography>,
+      <Typography key={v} textAlign="right">
+        {v}
+      </Typography>,
       <Input
         key={i}
         type="number"
@@ -68,46 +69,11 @@ const PaymentScorer = () => {
           <Typography>Mahjong:</Typography>
           {radios}
         </Box>
-        <Box p={1}>
+        <Box p={1} width={0.6}>
           <Grid columns="1fr 2fr">{inputs}</Grid>
         </Box>
 
-        <table>
-          <thead>
-            <tr>
-              <th>East</th>
-              <th>South</th>
-              <th>West</th>
-              <th>North</th>
-            </tr>
-          </thead>
-          <tbody>
-            {[0, 1, 2, 3, 4].map(i => (
-              <tr>
-                {results.map(r => (
-                  <td>
-                    <Typography fontWeight={r.mahjong ? "bold" : "normal"}>
-                      {r.ledger[i] || "-"}
-                    </Typography>
-                  </td>
-                ))}
-              </tr>
-            ))}
-            <tr>
-              {results.map(r => (
-                <td>
-                  <Typography
-                    borderTop={1}
-                    borderColor="black"
-                    fontWeight={r.mahjong ? "bold" : "normal"}
-                  >
-                    {r.total}
-                  </Typography>
-                </td>
-              ))}
-            </tr>
-          </tbody>
-        </table>
+        <ScoreSheet results={results} />
       </Box>
     </Container>
   );
