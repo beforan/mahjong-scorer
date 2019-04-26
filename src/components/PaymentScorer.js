@@ -3,12 +3,12 @@ import {
   Box,
   Input,
   Typography,
-  Radio,
-  FormCheck,
-  FormCheckLabel
+  Select,
+  Grid as Container
 } from "@smooth-ui/core-sc";
 import { calculatePayments } from "../services/payment-scoring";
 import { Grid } from "styled-css-grid";
+import ScoreSheet from "./ScoreSheet";
 
 const PaymentScorer = () => {
   const [mahjong, setMahjong] = useState(1);
@@ -27,27 +27,12 @@ const PaymentScorer = () => {
     );
   }, [mahjong, scores]);
 
-  useEffect(() => console.log(results), [results]);
-
-  const winds = ["East", "South", "West", "North"];
-  const radios = [];
   const inputs = [];
-  winds.forEach((v, i) => {
-    radios.push(
-      <FormCheck key={v}>
-        <Radio
-          id={`mahjong${v}`}
-          name="mahjongWind"
-          value={"" + (i + 1)}
-          checked={i + 1 === mahjong}
-          onChange={handleMahjongChange}
-        />
-        <FormCheckLabel htmlFor={`mahjong${v}`}>{v}</FormCheckLabel>
-      </FormCheck>
-    );
-
+  ["East", "South", "West", "North"].forEach((v, i) => {
     inputs.push([
-      <Typography key={v}>{v}</Typography>,
+      <Typography key={v} textAlign="right">
+        {v}
+      </Typography>,
       <Input
         key={i}
         type="number"
@@ -60,53 +45,25 @@ const PaymentScorer = () => {
   });
 
   return (
-    <Box display="flex" flexDirection="column">
-      <Typography variant="h4">Enter player scores</Typography>
-      <Box>
-        <Typography>Mahjong:</Typography>
-        {radios}
-      </Box>
-      <Box p={1}>
-        <Grid columns="1fr 2fr">{inputs}</Grid>
-      </Box>
+    <Container>
+      <Box display="flex" flexDirection="column">
+        <Typography variant="h4">Enter player scores</Typography>
+        <Box p={1} width={0.6}>
+          <Grid columns="1fr 2fr">
+            <Typography textAlign="right">Winner</Typography>
+            <Select control value={mahjong} onChange={handleMahjongChange}>
+              <option value={1}>East</option>
+              <option value={2}>South</option>
+              <option value={3}>West</option>
+              <option value={4}>North</option>
+            </Select>
+            {inputs}
+          </Grid>
+        </Box>
 
-      <table>
-        <thead>
-          <tr>
-            <th>East</th>
-            <th>South</th>
-            <th>West</th>
-            <th>North</th>
-          </tr>
-        </thead>
-        <tbody>
-          {[0, 1, 2, 3, 4].map(i => (
-            <tr>
-              {results.map(r => (
-                <td>
-                  <Typography fontWeight={r.mahjong ? "bold" : "normal"}>
-                    {r.ledger[i] || "-"}
-                  </Typography>
-                </td>
-              ))}
-            </tr>
-          ))}
-          <tr>
-            {results.map(r => (
-              <td>
-                <Typography
-                  borderTop={1}
-                  borderColor="black"
-                  fontWeight={r.mahjong ? "bold" : "normal"}
-                >
-                  {r.total}
-                </Typography>
-              </td>
-            ))}
-          </tr>
-        </tbody>
-      </table>
-    </Box>
+        <ScoreSheet results={results} />
+      </Box>
+    </Container>
   );
 };
 
